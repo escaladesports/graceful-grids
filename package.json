@@ -9,6 +9,10 @@
   },
   "author": "Kennedy Rose <krose@escaladesports.com> (https://escaladesports.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/escaladesports/graceful-grids.git"
+  },
   "devDependencies": {
     "browser-sync": "^2.18.8",
     "chokidar": "^1.6.1",
