@@ -4,7 +4,7 @@ const fs = require('fs')
 
 
 module.exports = () => {
-	console.log('compiling...')
+	console.log('Compiling...')
 	sass.render({
 		file: './test/style.scss'
 	}, (err, result) => {
@@ -12,7 +12,7 @@ module.exports = () => {
 		else{
 			fs.writeFile('./test/style.css', result.css, 'utf-8', err => {
 				if(err) console.error(err)
-				else console.log('done!')
+				else console.log('Done compiling')
 			})
 		}
 	})

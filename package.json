@@ -4,12 +4,13 @@
   "description": "A compact DRY grid system for Sass",
   "main": "smart-grids.scss",
   "scripts": {
-    "compile": "node test/compile.js",
-    "watch": "node test/watch.js"
+    "compile": "node test/node/compile.js",
+    "watch": "node test/node/watch.js"
   },
   "author": "Kennedy Rose <krose@escaladesports.com> (https://escaladesports.com)",
   "license": "MIT",
   "devDependencies": {
+    "browser-sync": "^2.18.8",
     "chokidar": "^1.6.1",
     "node-sass": "^4.5.0",
     "normalize.css": "^5.0.0"
