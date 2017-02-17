@@ -1,0 +1,205 @@
+$defaultGridOptions: (
+	padding: 10px,
+	columns: 12
+) !default;
+
+
+// Creates a row
+@mixin row($selector, $options){
+	$padding: map-get($options, 'padding');
+	$dryId: 'row|padding' + $padding;
+	#{$selector}{
+		@include dynamic-extend($dryId){
+			@if $padding{
+				margin: 0 ($padding * -1);
+			}
+			&:after{
+				content: '';
+				display: block;
+				clear: both;
+			}
+			> *:nth-of-type(1n){
+				box-sizing: border-box;
+				width: 100%;
+				float: left;
+				@if $padding{
+					padding: $padding;
+					padding-top: 0;
+				}
+			}
+		}
+	}
+}
+
+// Creates responsive grid
+@mixin grid($selector, $map, $options: ()){
+	// Split options
+	$opt: options($map, $options);
+	$options: map-get($opt, 'options');
+	$dryId: map-get($opt, 'dryId');
+	$type: map-get($opt, 'type');
+
+	// Row
+	@include row($selector, $options);
+
+	// Grid
+	@if $type == 'grid'{
+		// Loop through each media query
+		@each $size, $columns in $map{
+
+			@media(min-width:$size){
+				#{$selector}{
+					$sizeDryId: $dryId + 'size|' + $size;
+					@include dynamic-extend($sizeDryId){
+						// All columns
+						> *:nth-of-type(1n){
+							width: (100% / $columns);
+							clear: none;
+						}
+						// First column in row
+						> *:nth-of-type(#{($columns + n) - ($columns - 1)}){
+							clear: both;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Columns
+	@else{
+
+		// Loop through each media query
+		@each $size, $columns in $map{
+			@media(min-width:$size){
+				#{$selector}{
+					$sizeDryId: $dryId + 'size|' + $size;
+					@include dynamic-extend($sizeDryId){
+						// All columns
+						> *:nth-of-type(1n){
+							clear: none;
+						}
+
+
+						// Loop through each column
+						$col: 1;
+						$rowProgress: 0;
+						@each $width in $columns{
+							> *:nth-of-type(#{$col}){
+
+								$total: map-get($options, 'columns');
+								@if map-has-key($options, $size){
+									$total: map-get($options, $size);
+								}
+
+								$w: (100% * ($width / $total));
+								$tempDryId: $sizeDryId + '|size' + $size + '|w' + $w;
+								@include dynamic-extend($tempDryId){
+									width: $w;
+								}
+
+								// If first in row
+								@if $rowProgress == 0{
+									$tempDryId: 'size' + $size + '|clear';
+									@include dynamic-extend($tempDryId){
+										clear: both;
+									}
+								}
+
+								// If last in row
+								$rowProgress: $rowProgress + $width;
+								@if $rowProgress == $total{
+									$rowProgress: 0;
+								}
+
+							}
+							$col: $col + 1;
+						}
+
+					}
+
+
+				}
+			}
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+// Split out options into a different map
+@function options($map, $options){
+	$dryId: '';
+	$type: 'grid';
+
+	@each $key, $val in $defaultGridOptions{
+		@if map-has-key($options, $key){
+			$val: map-get($options, $key);
+		}
+		@else {
+			$val: map-get($defaultGridOptions, $key);
+			$options: map-merge($options, ($key: $val));
+		}
+	}
+
+	@each $key, $val in $options{
+		$dryId: $dryId + '|' + $key + $val;
+	}
+
+	@each $key, $val in $map{
+		@if type-of($val) == 'list'{
+			$type: 'columns';
+		}
+		@each $char in $val{
+			$dryId: $dryId + '|' + $val;
+		}
+	}
+
+	@return (
+		options: $options,
+		dryId: $dryId,
+		type: $type
+	);
+}
+
+
+
+
+
+
+// Dry extender
+$PrivatePlaceholders: () !default;
+@function placeholder-set($id) {
+	$unique-id: unique-id();
+	$PrivatePlaceholders: map-merge($PrivatePlaceholders, ($id: $unique-id)) !global;
+	@return $unique-id;
+}
+@function placeholder-get($id) {
+	@return map-get($PrivatePlaceholders, $id);
+}
+@mixin dynamic-extend($id) {
+	$placeholder-id: placeholder-get($id);
+	@if $placeholder-id == null {
+		$placeholder-id: placeholder-set($id);
+		@at-root %#{$placeholder-id} {
+			@content;
+		}
+	}
+	@extend %#{$placeholder-id};
+}
+@mixin mixin-dryer($id, $extend: true) {
+	@if $extend == true {
+		@include dynamic-extend($id) {
+			@content;
+		}
+	}
+	@else {
+		@content;
+	}
+}

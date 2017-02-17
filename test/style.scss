@@ -1,0 +1,38 @@
+@import 'node_modules/normalize.css/normalize';
+@import '../smart-grids';
+
+// Grid styles
+@include grid('.first', (
+	600px: 6 6 6 6,
+	1000px: 3 3 3 3
+));
+
+@include grid('.second', (
+	600px: 6 6 6 6
+))
+
+
+
+
+
+
+// Test styles
+body{
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 30px 0;
+}
+.constrain{
+	max-width: 1200px;
+	margin: auto;
+	padding: 20px;
+}
+.columns{
+	div{
+		div{
+			padding: 20px;
+			text-align: center;
+			color: #fff;
+			background-color: #999;
+		}
+	}
+}
