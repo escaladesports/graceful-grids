@@ -1,5 +1,5 @@
 @import 'node_modules/normalize.css/normalize';
-@import '../smart-grids';
+@import '../graceful-grids';
 
 // Grid styles
 @include grid('.first', (
