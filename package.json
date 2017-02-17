@@ -1,8 +1,8 @@
 {
-  "name": "smart-grids",
+  "name": "graceful-grids",
   "version": "0.0.0",
   "description": "A compact DRY grid system for Sass",
-  "main": "smart-grids.scss",
+  "main": "graceful-grids.scss",
   "scripts": {
     "compile": "node test/node/compile.js",
     "watch": "node test/node/watch.js"
