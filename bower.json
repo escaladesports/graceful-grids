@@ -1,0 +1,12 @@
+{
+  "name": "graceful-grids",
+  "main": [
+    "graceful-grids.scss"
+  ],
+  "devDependencies": {
+    "browser-sync": "^2.18.8",
+    "chokidar": "^1.6.1",
+    "node-sass": "^4.5.0",
+    "normalize.css": "^5.0.0"
+  }
+}

@@ -1,0 +1,7 @@
+
+
+
+- Default options easier to change
+- Live docs with examples (link to tests)
+- Pug output
+- Change mixin name to graceful-grid
